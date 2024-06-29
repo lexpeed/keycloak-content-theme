@@ -13,6 +13,9 @@
   git clone https://github.com/lexpeed/keycloak-content-theme.git
   cd keycloak-content-theme
 
+2. Vá para a branch que estamos trabalhando
+  git checkout feature/login
+
 2. Confira as versões (node=20.14.0 // pnpm=9.4.0)
   node -v
   pnpm -v
