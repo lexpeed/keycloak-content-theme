@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+main,
+body {
+  @apply m-0 p-0 box-border font-SegoeUI;
+}
+
+* {
+  @apply box-border;
+}

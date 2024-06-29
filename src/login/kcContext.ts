@@ -21,6 +21,19 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
       pageId: "login.ftl",
       locale: {
         currentLanguageTag: "pt-BR",
+        // currentLanguageTag: "en",
+      },
+      realm: {
+        registrationAllowed: true,
+        internationalizationEnabled: false,
+        displayName: "Portal do Prof",
+        // displayNameHtml: '<h1>Portal do Prof</h1>',
+        displayNameHtml: "",
+      },
+      login: {
+        username: 'teste'
+        // rememberMe?: string;
+        // password?: string;
       },
       // Uncomment the following line for hiding the Alert message
       // "message": undefined
@@ -81,6 +94,12 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
       locale: {
         currentLanguageTag: "pt-BR",
       },
+      realm: {
+        internationalizationEnabled: false,
+        displayName: "Portal do Prof",
+        // displayNameHtml: '<h1>Portal do Prof</h1>',
+        displayNameHtml: "",
+      },
       authorizedMailDomains: [
         "example.com",
         "another-example.com",
@@ -116,7 +135,7 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
 
 export const { kcContext } = getKcContext({
   // Uncomment to test the login page for development.
-  // mockPageId: "login.ftl",
+  mockPageId: "login.ftl",
   // mockPageId: "my-extra-page-2.ftl",
   // mockPageId: "register-user-profile.ftl",
   // mockPageId: "register.ftl",

@@ -1,12 +1,36 @@
-.my-color {
-  color: red;
+body {
+  @apply bg-neutral_02;
 }
 
-.my-font {
-  font-family: "Work Sans";
+section {
+  @apply w-full;
 }
 
-.my-root-class,
-.my-root-class body {
-  background: white;
+.auth-container {
+  @apply px-10 mt-16 sm:mt-20 flex flex-col items-center gap-6;
+}
+
+.auth-header {
+  @apply w-full text-center;
+}
+
+.auth-header h1 {
+  @apply text-neutral_10 font-bold my-4;
+}
+
+.auth-header p {
+  @apply text-neutral_08 text-sm font-medium m-0;
+}
+
+.auth-body {
+  @apply w-full mb-4 mx-6 flex flex-col items-center;
+  @apply sm:max-w-[420px];
+}
+
+.auth-body .auth-tabs {
+  @apply w-full;
+}
+
+.ant-form-item {
+  margin-bottom: 12px !important;
 }

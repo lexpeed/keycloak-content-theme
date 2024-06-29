@@ -1,0 +1,37 @@
+/*
+This file is only meant to be used by Storybook
+*/
+
+@font-face {
+  font-family: "Segoe UI";
+  font-style: normal;
+  font-weight: normal; /*400*/
+  font-display: swap;
+  src: url("./SegoeUI.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Segoe UI";
+  font-style: italic;
+  font-weight: normal; /*400*/
+  font-display: swap;
+  src: url("./SegoeUIItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Segoe UI";
+  font-style: normal;
+  /* font-weight: bold; */ /*700*/
+  font-weight: 500;
+  font-display: swap;
+  src: url("./SegoeUIBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Segoe UI";
+  font-style: italic;
+  /* font-weight: bold; */ /*700*/
+  font-weight: 500;
+  font-display: swap;
+  src: url("./SegoeUIBoldItalic.ttf") format("truetype");
+}
