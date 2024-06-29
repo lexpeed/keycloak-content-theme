@@ -16,22 +16,22 @@
 2. Vá para a branch que estamos trabalhando
   git checkout feature/login
 
-2. Confira as versões (node=20.14.0 // pnpm=9.4.0)
+3. Confira as versões (node=20.14.0 // pnpm=9.4.0)
   node -v
   pnpm -v
 
-3. Duplique o arquivo .npmrc.sample e o novo arquivo se chamará .npmrc
+4. Duplique o arquivo .npmrc.sample e o novo arquivo se chamará .npmrc
   cp .npmrc.sample .npmrc
 
-4. Modifique o conteúdo do arquivo .npmrc, substituindo <YOUR_PERSONAL_ACCESS_TOKEN> para o token que foi compartilhado com você
+5. Modifique o conteúdo do arquivo .npmrc, substituindo <YOUR_PERSONAL_ACCESS_TOKEN> para o token que foi compartilhado com você
 
-5. Instale as dependencias do projeto
+6. Instale as dependencias do projeto
   pnpm install
 
-6. Rode o projeto
+7. Rode o projeto
   pnpm dev
 
-7. Confire no navegador se você consegue acessar a página http://localhost:5173/
+8. Confire no navegador se você consegue acessar a página http://localhost:5173/
 
 # Entendendo o projeto
 
