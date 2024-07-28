@@ -25,16 +25,32 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
       },
       realm: {
         registrationAllowed: true,
+        resetPasswordAllowed: true,
+        rememberMe: true,
+        registrationEmailAsUsername: true,
+        loginWithEmailAllowed: true,
         internationalizationEnabled: false,
-        displayName: "Portal do Prof",
-        // displayNameHtml: '<h1>Portal do Prof</h1>',
+        displayName: "Portal Eduque",
+        // displayNameHtml: '<h1>Portal Eduque</h1>',
         displayNameHtml: "",
       },
       login: {
-        username: 'teste'
-        // rememberMe?: string;
+        // username: 'teste',
+        // rememberMe: 'on',
         // password?: string;
       },
+      // social: {
+      //   displayInfo: true,
+      //   providers: [
+      //     {
+      //       alias: "google",
+      //       providerId: "google",
+      //       displayName: "Google",
+      //       loginUrl: "google",
+      //     },
+      //   ],
+      // },
+      usernameHidden: false,
       // Uncomment the following line for hiding the Alert message
       // "message": undefined
       // Uncomment the following line for showing an Error message
@@ -93,13 +109,27 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
       pageId: "register.ftl",
       locale: {
         currentLanguageTag: "pt-BR",
+        // currentLanguageTag: "en",
       },
       realm: {
         internationalizationEnabled: false,
-        displayName: "Portal do Prof",
-        // displayNameHtml: '<h1>Portal do Prof</h1>',
+        displayName: "Portal Eduque",
+        // displayNameHtml: '<h1>Portal Eduque</h1>',
         displayNameHtml: "",
+        registrationEmailAsUsername: true,
       },
+      register: {
+        formData: {
+          // firstName: "John",
+          // displayName: "John Doe",
+          // lastName: "Doe",
+          // email: "john.doe@email.com",
+          // username: "john.doe",
+        },
+      },
+      recaptchaRequired: false,
+      recaptchaSiteKey: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+      passwordRequired: true,
       authorizedMailDomains: [
         "example.com",
         "another-example.com",
@@ -107,16 +137,6 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
         "*.example.com",
         "hello-world.com",
       ],
-      // Simulate we got an error with the email field
-      messagesPerField: {
-        printIfExists: <T>(fieldName: string, className: T) => {
-          console.log({ fieldName });
-          return fieldName === "email" ? className : undefined;
-        },
-        existsError: (fieldName: string) => fieldName === "email",
-        get: (fieldName: string) => `Fake error for ${fieldName}`,
-        exists: (fieldName: string) => fieldName === "email",
-      },
     },
     {
       pageId: "terms.ftl",
@@ -135,7 +155,7 @@ export const { getKcContext } = createGetKcContext<KcContextExtension>({
 
 export const { kcContext } = getKcContext({
   // Uncomment to test the login page for development.
-  mockPageId: "login.ftl",
+  // mockPageId: "login.ftl",
   // mockPageId: "my-extra-page-2.ftl",
   // mockPageId: "register-user-profile.ftl",
   // mockPageId: "register.ftl",

@@ -1,61 +1,33 @@
-import { useState, type FormEventHandler } from "react";
+import { useState } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
-import { Form } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { Input, Button } from "@lexpeed/components-react";
+import {
+  Form,
+  Input,
+  Typography,
+  Checkbox,
+  theme,
+  Button,
+  FormProps,
+} from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  ContactsOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 
 import type { PageProps } from "../typings";
 import type { KcContext } from "../kcContext";
 import type { I18n } from "../i18n";
 
-const my_custom_param = new URL(window.location.href).searchParams.get(
-  "my_custom_param"
-);
-
-if (my_custom_param !== null) {
-  console.log("my_custom_param:", my_custom_param);
-}
-
-// export default function Login(
-//   props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>
-// ) {
-//   const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
-//   const { social, realm, url, registrationDisabled } = kcContext;
-//   const { msg, msgStr } = i18n;
-
-//   return (
-//     <Template
-//       {...{ kcContext, i18n, doUseDefaultCss, classes }}
-//       displayInfo={
-//         realm.password && realm.registrationAllowed && !registrationDisabled
-//       }
-//       displayWide={realm.password && social.providers !== undefined}
-//       headerNode={msg("doLogIn")}
-//       pageTitleNode={<h1>{msgStr("loginPageTitle")}</h1>}
-//       pageSubtitleNode={<p>{msgStr("loginPageSubtitle")}</p>}
-//       infoNode={
-//         <div id="kc-registration">
-//           <span>
-//             {msg("noAccount")}
-//             <a tabIndex={6} href={url.registrationUrl}>
-//               {msg("doRegister")}
-//             </a>
-//           </span>
-//         </div>
-//       }
-//       registerPageFormNode={null}
-//     >
-//       <LoginContent {...props} />
-//     </Template>
-//   );
-// }
-
 export default function Login(
   props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>
 ) {
   const { kcContext, i18n, doUseDefaultCss, classes } = props;
+  const { token } = theme.useToken();
+  const [form] = Form.useForm();
 
   const { getClassName } = useGetClassName({
     doUseDefaultCss,
@@ -66,24 +38,35 @@ export default function Login(
 
   const { msg, msgStr } = i18n;
 
-  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const onSubmit = useConstCallback<FormEventHandler<HTMLFormElement>>((e) => {
-    e.preventDefault();
+  const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
+    setIsButtonDisabled(true);
 
-    setIsLoginButtonDisabled(true);
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(([, v]) => v !== undefined)
+    );
 
-    const formElement = e.target as HTMLFormElement;
-
-    //NOTE: Even if we login with email Keycloak expect username and password in
-    //the POST request.
-    formElement
-      .querySelector("input[name='email']")
-      ?.setAttribute("name", "username");
-
-    formElement.submit();
+    fetch(url.loginAction, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(
+        filteredValues as Record<string, string>
+      ).toString(),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = response.url;
+        } else {
+          setIsButtonDisabled(false);
+        }
+      })
+      .catch(() => {
+        setIsButtonDisabled(false);
+      });
   });
-  console.log(login)
 
   return (
     <div
@@ -105,248 +88,165 @@ export default function Login(
         )}
       >
         {realm.password && (
-          <>
-            <Form
-              name="kc-form-login"
-              style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-                gap: "12px",
-              }}
-              initialValues={{ remember: false, username: login.username ?? "" }}
-              autoComplete="off"
-              layout="vertical"
-              onFinish={onSubmit}
-              action={url.loginAction}
-              method="post"
+          <Form
+            name="kc-form-login"
+            form={form}
+            autoComplete="off"
+            layout="vertical"
+            onFinish={onSubmit}
+            action={url.loginAction}
+            method="post"
+          >
+            <div className={getClassName("kcFormGroupClass")}>
+              {!usernameHidden &&
+                (() => {
+                  const label = !realm.loginWithEmailAllowed
+                    ? "username"
+                    : realm.registrationEmailAsUsername
+                    ? "email"
+                    : "usernameOrEmail";
+
+                  const autoCompleteHelper: typeof label =
+                    label === "usernameOrEmail" ? "username" : label;
+
+                  const placeholderHelper =
+                    label === "username"
+                      ? msgStr("placeholderUsername")
+                      : msgStr("placeholderEmail");
+
+                  const IconPrefix =
+                    label === "usernameOrEmail"
+                      ? ContactsOutlined
+                      : label === "username"
+                      ? UserOutlined
+                      : MailOutlined;
+
+                  return (
+                    <Form.Item
+                      // name={label}
+                      name="username"
+                      label={msg(label)}
+                      className={getClassName("kcLabelClass")}
+                      htmlFor={autoCompleteHelper}
+                      initialValue={login.username ?? ""}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            label === "email"
+                              ? msgStr("missingEmailMessage")
+                              : label === "usernameOrEmail"
+                              ? msgStr("missingEmailMessage")
+                              : msgStr("missingUsernameMessage"),
+                        },
+                      ]}
+                    >
+                      <Input
+                        id={autoCompleteHelper}
+                        tabIndex={1}
+                        // name={autoCompleteHelper}
+                        name="username"
+                        placeholder={placeholderHelper}
+                        prefix={
+                          <IconPrefix style={{ color: token.colorPrimary }} />
+                        }
+                        size="large"
+                        className={getClassName("kcInputClass")}
+                        type="text"
+                        autoFocus={true}
+                        autoComplete={autoCompleteHelper}
+                      />
+                    </Form.Item>
+                  );
+                })()}
+            </div>
+            <div className={getClassName("kcFormGroupClass")}>
+              <Form.Item
+                name="password"
+                label={msg("password")}
+                className={getClassName("kcLabelClass")}
+                htmlFor="password"
+                rules={[
+                  {
+                    required: true,
+                    message: msgStr("missingPasswordMessage"),
+                  },
+                ]}
+              >
+                <Input.Password
+                  id="password"
+                  tabIndex={2}
+                  name="password"
+                  placeholder={msgStr("placeholderPassword")}
+                  prefix={
+                    <LockOutlined style={{ color: token.colorPrimary }} />
+                  }
+                  size="large"
+                  className={getClassName("kcInputClass")}
+                  type="password"
+                  autoComplete="current-password"
+                  visibilityToggle
+                />
+              </Form.Item>
+            </div>
+            <div
+              className={clsx(
+                getClassName("kcFormGroupClass"),
+                getClassName("kcFormSettingClass")
+              )}
             >
-              <div className={getClassName("kcFormGroupClass")}>
-                {!usernameHidden &&
-                  (() => {
-                    const label = !realm.loginWithEmailAllowed
-                      ? "username"
-                      : realm.registrationEmailAsUsername
-                      ? "email"
-                      : "usernameOrEmail";
-
-                    const autoCompleteHelper: typeof label =
-                      label === "usernameOrEmail" ? "username" : label;
-
-                    return (
-                      <>
-                        <Form.Item
-                          name={label}
-                          label={msg(label)}
-                          htmlFor={autoCompleteHelper}
-                          className={getClassName("kcLabelClass")}
-                          rules={[
-                            {
-                              required: true,
-                              message:
-                                label === "email"
-                                  ? msgStr("invalidEmailMessage")
-                                  : label === "usernameOrEmail"
-                                  ? msgStr("invalidUsernameOrEmailMessage")
-                                  : msgStr("invalidUsernameMessage"),
-                            },
-                          ]}
-                        >
-                          <Input
-                            id={autoCompleteHelper}
-                            tabIndex={1}
-                            name={autoCompleteHelper}
-                            placeholder="Ex: mariaoliveira@gmail.com"
-                            prefix={
-                              <UserOutlined style={{ color: "#16C2C2" }} />
-                            }
-                            style={{
-                              display: "flex",
-                              height: "40px",
-                              alignItems: "center",
-                              alignSelf: "stretch",
-                            }}
-                            className={getClassName("kcInputClass")}
-                            // defaultValue={login.username ?? ""}
-                            type="text"
-                            autoFocus={true}
-                            autoComplete="off"
-                          />
-                        </Form.Item>
-                        {/* <label
-                          htmlFor={autoCompleteHelper}
-                          className={getClassName("kcLabelClass")}
-                        >
-                          {msg(label)}
-                        </label>
-                        <input
-                          tabIndex={1}
-                          id={autoCompleteHelper}
-                          className={getClassName("kcInputClass")}
-                          //NOTE: This is used by Google Chrome auto fill so we use it to tell
-                          //the browser how to pre fill the form but before submit we put it back
-                          //to username because it is what keycloak expects.
-                          name={autoCompleteHelper}
-                          defaultValue={login.username ?? ""}
-                          type="text"
-                          autoFocus={true}
-                          autoComplete="off"
-                        /> */}
-                      </>
-                    );
-                  })()}
+              <div id="kc-form-options">
+                {realm.rememberMe && !usernameHidden && (
+                  <Form.Item
+                    name="rememberMe"
+                    className="checkbox"
+                    valuePropName="checked"
+                  >
+                    <Checkbox
+                      tabIndex={3}
+                      id="rememberMe"
+                      name="rememberMe"
+                      defaultChecked={login.rememberMe === "on"}
+                    >
+                      {msg("rememberMe")}
+                    </Checkbox>
+                  </Form.Item>
+                )}
               </div>
-              {/* <Form.Item
-                name="email"
-                label="Email cadastrado"
-                rules={[{ required: true, message: "Insira um email válido" }]}
+              <div className={getClassName("kcFormOptionsWrapperClass")}>
+                {realm.resetPasswordAllowed && (
+                  <Form.Item>
+                    <Typography.Link
+                      tabIndex={5}
+                      href={url.loginResetCredentialsUrl}
+                      style={{ color: token.colorPrimary }}
+                      className="link-focus-visible"
+                    >
+                      {msg("doForgotPassword")}
+                    </Typography.Link>
+                  </Form.Item>
+                )}
+              </div>
+            </div>
+            <div
+              id="kc-form-buttons"
+              className={getClassName("kcFormGroupClass")}
+            >
+              <Form.Item
+                name="credentialId"
+                hidden
+                initialValue={auth?.selectedCredential}
               >
                 <Input
-                  placeholder="Ex: mariaoliveira@gmail.com"
-                  prefix={<UserOutlined style={{ color: "#16C2C2" }} />}
-                  style={{
-                    display: "flex",
-                    height: "40px",
-                    alignItems: "center",
-                    alignSelf: "stretch",
-                  }}
-                />
-              </Form.Item> */}
-
-              <Form.Item name="loginButton">
-                <Button
-                  style={{
-                    height: "40px",
-                    width: "100%",
-                    padding: "6.4px 56px",
-                    gap: "10px",
-                    alignSelf: "stretch",
-                    borderRadius: "8px",
-                    background: "var(--Brand-06, #16C2C2)",
-                    boxShadow: "0px 2px 0px 0px rgba(0, 0, 0, 0.04)",
-                    color: "var(--Neutral-01, #FFF)",
-                    textAlign: "center",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "16px",
-                    fontStyle: "normal",
-                    fontWeight: 500,
-                    lineHeight: "24px",
-                  }}
-                >
-                  Entrar
-                </Button>
-              </Form.Item>
-            </Form>
-            <form
-              // id="kc-form-login"
-              id="kc-form-login-old"
-              onSubmit={onSubmit}
-              action={url.loginAction}
-              method="post"
-            >
-              <div className={getClassName("kcFormGroupClass")}>
-                {!usernameHidden &&
-                  (() => {
-                    const label = !realm.loginWithEmailAllowed
-                      ? "username"
-                      : realm.registrationEmailAsUsername
-                      ? "email"
-                      : "usernameOrEmail";
-
-                    const autoCompleteHelper: typeof label =
-                      label === "usernameOrEmail" ? "username" : label;
-
-                    return (
-                      <>
-                        <label
-                          htmlFor={autoCompleteHelper}
-                          className={getClassName("kcLabelClass")}
-                        >
-                          {msg(label)}
-                        </label>
-                        <input
-                          tabIndex={1}
-                          id={autoCompleteHelper}
-                          className={getClassName("kcInputClass")}
-                          //NOTE: This is used by Google Chrome auto fill so we use it to tell
-                          //the browser how to pre fill the form but before submit we put it back
-                          //to username because it is what keycloak expects.
-                          name={autoCompleteHelper}
-                          defaultValue={login.username ?? ""}
-                          type="text"
-                          autoFocus={true}
-                          autoComplete="off"
-                        />
-                      </>
-                    );
-                  })()}
-              </div>
-              <div className={getClassName("kcFormGroupClass")}>
-                <label
-                  htmlFor="password"
-                  className={getClassName("kcLabelClass")}
-                >
-                  {msg("password")}
-                </label>
-                <input
-                  tabIndex={2}
-                  id="password"
-                  className={getClassName("kcInputClass")}
-                  name="password"
-                  type="password"
-                  autoComplete="off"
-                />
-              </div>
-              <div
-                className={clsx(
-                  getClassName("kcFormGroupClass"),
-                  getClassName("kcFormSettingClass")
-                )}
-              >
-                <div id="kc-form-options">
-                  {realm.rememberMe && !usernameHidden && (
-                    <div className="checkbox">
-                      <label>
-                        <input
-                          tabIndex={3}
-                          id="rememberMe"
-                          name="rememberMe"
-                          type="checkbox"
-                          {...(login.rememberMe === "on"
-                            ? {
-                                checked: true,
-                              }
-                            : {})}
-                        />
-                        {msg("rememberMe")}
-                      </label>
-                    </div>
-                  )}
-                </div>
-                <div className={getClassName("kcFormOptionsWrapperClass")}>
-                  {realm.resetPasswordAllowed && (
-                    <span>
-                      <a tabIndex={5} href={url.loginResetCredentialsUrl}>
-                        {msg("doForgotPassword")}
-                      </a>
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div
-                id="kc-form-buttons"
-                className={getClassName("kcFormGroupClass")}
-              >
-                <input
-                  type="hidden"
                   id="id-hidden-input"
                   name="credentialId"
-                  {...(auth?.selectedCredential !== undefined
-                    ? {
-                        value: auth.selectedCredential,
-                      }
-                    : {})}
+                  type="hidden"
+                  value={auth?.selectedCredential}
                 />
-                <input
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  id="kc-login"
                   tabIndex={4}
                   className={clsx(
                     getClassName("kcButtonClass"),
@@ -354,15 +254,17 @@ export default function Login(
                     getClassName("kcButtonBlockClass"),
                     getClassName("kcButtonLargeClass")
                   )}
-                  name="login"
-                  id="kc-login"
-                  type="submit"
-                  value={msgStr("doLogIn")}
-                  disabled={isLoginButtonDisabled}
-                />
-              </div>
-            </form>
-          </>
+                  htmlType="submit"
+                  disabled={isButtonDisabled}
+                  type="primary"
+                  size="large"
+                  block
+                >
+                  {msgStr("doLogIn")}
+                </Button>
+              </Form.Item>
+            </div>
+          </Form>
         )}
       </div>
       {realm.password && social.providers !== undefined && (

@@ -14,11 +14,9 @@ export type TemplateProps<
 > = Omit<KeycloakifyTemplateProps<KcContext, I18nExtended>, "headerNode"> & {
   headerNode?: ReactNode;
   activeTab?: string;
-  onTabClick?: (key: string) => void;
+  onTabClick?: (key: string, e: React.KeyboardEvent | React.MouseEvent) => void;
   pageTitleNode?: ReactNode;
   pageSubtitleNode?: ReactNode;
-  loginPageFormNode?: ReactNode;
-  registerPageFormNode?: ReactNode;
 };
 
 export type PageProps<

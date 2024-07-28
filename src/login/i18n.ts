@@ -14,6 +14,11 @@ export const { useI18n } = createUseI18n({
     registerPageTitle: "Register with email",
     registerPageSubtitle:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim vel nulla quis luctus.",
+    placeholderUsername: "jhon.doe",
+    placeholderEmail: "jhon.doe@email.com",
+    placeholderPassword: "••••••••••••",
+    placeholderFirstName: "Jhon",
+    placeholderLastName: "Doe",
   },
   "pt-BR": {
     /* spell-checker: disable */
@@ -29,6 +34,11 @@ export const { useI18n } = createUseI18n({
     registerPageTitle: "Cadastro com e-mail",
     registerPageSubtitle:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim vel nulla quis luctus.",
+    placeholderUsername: "joao.silva",
+    placeholderEmail: "joao.silva@email.com",
+    placeholderPassword: "••••••••••••",
+    placeholderFirstName: "João",
+    placeholderLastName: "Silva",
     /* spell-checker: enable */
   },
 });
