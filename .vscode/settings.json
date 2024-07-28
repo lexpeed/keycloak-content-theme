@@ -1,7 +1,21 @@
 {
-    "cSpell.words": [
-        "keycloak",
-        "keycloakify",
-        "wangchucheng"
-    ]
+  "parameterHints.hintingType": "variableOnly",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "cSpell.words": [
+    "clsx",
+    "cssinjs",
+    "Idcard",
+    "keycloak",
+    "keycloakify",
+    "Narowed",
+    "recaptcha",
+    "wangchucheng"
+  ]
 }

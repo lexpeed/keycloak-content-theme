@@ -1,0 +1,6 @@
+@lexpeed:registry=https://gitlab.com/api/v4/packages/npm/
+//gitlab.com/api/v4/packages/npm/:_authToken="<YOUR_PERSONAL_ACCESS_TOKEN>"
+//gitlab.com/api/v4/projects/:_authToken="<YOUR_PERSONAL_ACCESS_TOKEN>"
+auto-install-peers=true
+engine-strict=true
+strict-peer-dependencies=false

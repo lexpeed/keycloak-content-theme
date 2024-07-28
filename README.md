@@ -1,3 +1,78 @@
+# Pre-requisitos
+1. Tenha o nvm instalado: https://github.com/nvm-sh/nvm
+
+2. Tenha o node instaldo via nvm:
+  nvm install 20.14.0
+  nvm use 20.14.0
+
+3. Tenha o pnpm instaldo via npm:
+  npm install -g pnpm@9.4.0
+
+# Rodando o projeto
+1. Faça clone do projeto
+  git clone https://github.com/lexpeed/keycloak-content-theme.git
+  cd keycloak-content-theme
+
+2. Vá para a branch que estamos trabalhando
+  git checkout feature/login
+
+3. Confira as versões (node=20.14.0 // pnpm=9.4.0)
+  node -v
+  pnpm -v
+
+4. Duplique o arquivo .npmrc.sample e o novo arquivo se chamará .npmrc
+  cp .npmrc.sample .npmrc
+
+5. Modifique o conteúdo do arquivo .npmrc, substituindo <YOUR_PERSONAL_ACCESS_TOKEN> para o token que foi compartilhado com você
+
+6. Instale as dependencias do projeto
+  pnpm install
+
+7. Rode o projeto
+  pnpm dev
+
+8. Confire no navegador se você consegue acessar a página http://localhost:5173/
+
+# Entendendo o projeto
+
+1. Veja que existe um arquivo index.html na raiz.
+1.1. Dentro desse arquivo e dentro do <body> tem uma tag <main> onde tem um id="root" (geralmente no react é uma tag <div>)
+1.1. Também tem dentro do <body> uma tag <script> onde voce injeta o primeiro arquivo javascript (no caso desse projeto, typescript)
+
+2. Veja que existe um arquivo main.tsx dentro da pasta src
+2.1. Dentro desse arquivo voce vai reparar que ele referencia tag com id="root" para renderizar os componentes react
+2.2. Dentro da função createRoot(...).render() voce vai ver que ele renderiza o arquivo src/login/KcApp.tsx
+
+3. Navegue até o arquivo src/login/KcApp.tsx
+3.1. Você vai ver que dentro da <section> tem um switch
+3.2. Dentro do switch você vai ver os primeiros cases (case "login.ftl": case "register.ftl")
+3.3. Dentro desse case, irá ter um retorno de componentes react. Os mais importantes por agora são:
+    {kcContext.pageId === "login.ftl" ? (
+      <Login
+        {...{ kcContext, i18n, Template, classes }}
+        doUseDefaultCss={doUseDefaultCss}
+      />
+    ) : (
+      <Register
+        {...{ kcContext, i18n, Template, classes }}
+        doUseDefaultCss={doUseDefaultCss}
+      />
+    )}
+
+4. Navegue até o arquivo src/login/pages/Login.tsx
+4.1. Dentro do arquivo, navegue até o componente <Button ...>
+4.2. Modifique o conteúdo de dentro (troque a palavra entrar)
+4.3. Você deve ver no navegador a mudança acontecer
+
+5. Navegue até o arquivo src/login/pages/Register.tsx
+...
+
+# FAQ (duvidas do Vitor)
+1. "Como saber qual é a versão do node que o projeto usa?"
+Re.: Em geral, não é obrigatório dizer isso em projetos nodes. Mas eu gosto de usar o arquivo .nvmrc para me dizer qual a versão do node para cada projeto. Então, nesse projeto, procure sempre ver qual é a versão do node através desse arquivo.
+
+------------------------------------------------
+
 <p align="center">
     <i>🚀 A starter/demo project for <a href="https://keycloakify.dev">Keycloakify</a> v9 🚀</i>
     <br/>

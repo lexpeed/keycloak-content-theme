@@ -14,51 +14,46 @@
     -->
     <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32x32.png">
 
-    <title>Keycloak Default Theme Lexpeed</title>
+    <title>Keycloak Content Theme Lexpeed</title>
 
-    <link rel="preload" href="%BASE_URL%fonts/WorkSans/worksans-bold-webfont.woff2" as="font" crossorigin="anonymous">
-    <link rel="preload" href="%BASE_URL%fonts/WorkSans/worksans-medium-webfont.woff2" as="font" crossorigin="anonymous">
-    <link rel="preload" href="%BASE_URL%fonts/WorkSans/worksans-regular-webfont.woff2" as="font" crossorigin="anonymous">
-    <link rel="preload" href="%BASE_URL%fonts/WorkSans/worksans-semibold-webfont.woff2" as="font" crossorigin="anonymous">
-    <!-- SEE: https://docs.keycloakify.dev/limitations#self-hosted-fonts -->
-    <!-- Don't forget to import your custom fonts in Storybook as well: https://github.com/keycloakify/keycloakify-starter/blob/bb019e66fb09166cb9af1e24e230994f59daa420/src/keycloak-theme/login/createPageStory.tsx#L21 -->
+    <link rel="preload" href="%BASE_URL%fonts/SegoeUI/SegoeUI.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="%BASE_URL%fonts/SegoeUI/SegoeUIItalic.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="%BASE_URL%fonts/SegoeUI/SegoeUIBold.ttf" as="font" crossorigin="anonymous">
+    <link rel="preload" href="%BASE_URL%fonts/SegoeUI/SegoeUIBoldItalic.ttf" as="font" crossorigin="anonymous">
+
     <style>
-      /* latin */
       @font-face {
-      	font-family: 'Work Sans';
-      	font-style: normal;
-      	font-weight: normal;
-      	/*400*/
-      	font-display: swap;
-      	src: url("%BASE_URL%fonts/WorkSans/worksans-regular-webfont.woff2") format("woff2");
+        font-family: "Segoe UI";
+        font-style: normal;
+        font-weight: normal;
+        font-display: swap;
+        src: url("%BASE_URL%fonts/SegoeUI/SegoeUI.ttf") format("truetype");
       }
-    
-      /* latin */
+
       @font-face {
-      	font-family: 'Work Sans';
-      	font-style: normal;
-      	font-weight: 500;
-      	font-display: swap;
-      	src: url("%BASE_URL%fonts/WorkSans/worksans-medium-webfont.woff2") format("woff2");
+        font-family: "Segoe UI";
+        font-style: italic;
+        font-weight: normal;
+        font-display: swap;
+        src: url("%BASE_URL%fonts/SegoeUI/SegoeUIItalic.ttf") format("truetype");
       }
-    
-      /* latin */
+
       @font-face {
-      	font-family: 'Work Sans';
-      	font-style: normal;
-      	font-weight: 600;
-      	font-display: swap;
-      	src: url("%BASE_URL%fonts/WorkSans/worksans-semibold-webfont.woff2") format("woff2");
+        font-family: "Segoe UI";
+        font-style: normal;
+        /* font-weight: bold; */ /*700*/
+        font-weight: 500;
+        font-display: swap;
+        src: url("%BASE_URL%fonts/SegoeUI/SegoeUIBold.ttf") format("truetype");
       }
-    
-      /* latin */
+
       @font-face {
-      	font-family: 'Work Sans';
-      	font-style: normal;
-      	font-weight: bold;
-      	/*700*/
-      	font-display: swap;
-      	src: url("%BASE_URL%fonts/WorkSans/worksans-bold-webfont.woff2") format("woff2");
+        font-family: "Segoe UI";
+        font-style: italic;
+        /* font-weight: bold; */ /*700*/
+        font-weight: 500;
+        font-display: swap;
+        src: url("%BASE_URL%fonts/SegoeUI/SegoeUIBoldItalic.ttf") format("truetype");
       }
     </style>
 

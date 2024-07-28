@@ -1,12 +1,18 @@
-.my-color {
-  color: red;
+.container {
+  min-height: 100vh;
 }
 
-.my-font {
-  font-family: "Work Sans";
+.header {
+  text-align: center;
 }
 
-.my-root-class,
-.my-root-class body {
-  background: white;
+.content {
+  padding: 0 40px 24px 40px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .content {
+    max-width: 420px;
+  }
 }
