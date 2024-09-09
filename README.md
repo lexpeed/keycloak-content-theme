@@ -293,4 +293,4 @@ jobs:
 EOF
 ```
 
-You can also remove `oidc-spa`, `powerhooks`, `zod` and `tsafe` from your dependencies
+You can also remove `oidc-spa`, `powerhooks`, `zod` and `tsafe` from your dependencies.
