@@ -18,8 +18,8 @@ createRoot(document.getElementById("root")!).render(
           cssVar: false,
           algorithm: theme.defaultAlgorithm,
           token: {
-            colorPrimary: "#16c2c2",
-            colorLink: "#16c2c2",
+            colorPrimary: "#7230FE",
+            colorLink: "#7230FE",
             fontFamily: "Segoe UI, Arial, sans-serif",
           },
           components: {

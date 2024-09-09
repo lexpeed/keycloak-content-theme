@@ -49,6 +49,7 @@ export default function Login(
 
     fetch(url.loginAction, {
       method: "POST",
+      mode: 'no-cors',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
