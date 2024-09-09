@@ -21,7 +21,6 @@ export default function Register(
 ) {
   const { kcContext, i18n, doUseDefaultCss, classes } = props;
   const { token } = theme.useToken();
-  const [form] = Form.useForm();
 
   const { getClassName } = useGetClassName({
     doUseDefaultCss,
@@ -70,14 +69,10 @@ export default function Register(
   });
 
   return (
-    <Form
+    <form
       id="kc-register-form"
-      className={getClassName("kcFormClass")}
-      name="kc-form-register"
-      form={form}
       autoComplete="off"
-      layout="vertical"
-      onFinish={onSubmit}
+      onSubmit={onSubmit}
       action={url.registrationAction}
       method="post"
     >
@@ -85,6 +80,7 @@ export default function Register(
         <Form.Item
           name="firstName"
           label={msg("firstName")}
+          layout="vertical"
           className={getClassName("kcLabelClass")}
           htmlFor="firstName"
           rules={[
@@ -116,6 +112,7 @@ export default function Register(
         <Form.Item
           name="lastName"
           label={msg("lastName")}
+          layout="vertical"
           className={getClassName("kcLabelClass")}
           htmlFor="lastName"
           rules={[
@@ -146,6 +143,7 @@ export default function Register(
         <Form.Item
           name="email"
           label={msg("email")}
+          layout="vertical"
           className={getClassName("kcLabelClass")}
           htmlFor="email"
           rules={[
@@ -177,6 +175,7 @@ export default function Register(
           <Form.Item
             name="username"
             label={msg("username")}
+            layout="vertical"
             className={getClassName("kcLabelClass")}
             htmlFor="username"
             rules={[
@@ -211,6 +210,7 @@ export default function Register(
               name="password"
               label={msg("password")}
               className={getClassName("kcLabelClass")}
+              layout="vertical"
               htmlFor="password"
               rules={[
                 {
@@ -242,6 +242,7 @@ export default function Register(
             <Form.Item
               name="password-confirm"
               label={msg("passwordConfirm")}
+              layout="vertical"
               className={getClassName("kcLabelClass")}
               htmlFor="password-confirm"
               rules={[
@@ -325,6 +326,6 @@ export default function Register(
           </Form.Item>
         </div>
       </div>
-    </Form>
+    </form>
   );
 }
