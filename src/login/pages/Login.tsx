@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEventHandler } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
@@ -9,7 +9,7 @@ import {
   Checkbox,
   theme,
   Button,
-  FormProps,
+  // FormProps,
 } from "antd";
 import {
   UserOutlined,
@@ -22,14 +22,14 @@ import type { PageProps } from "../typings";
 import type { KcContext } from "../kcContext";
 import type { I18n } from "../i18n";
 
-let submitted = false;
+// let submitted = false;
 
 export default function Login(
   props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>
 ) {
   const { kcContext, i18n, doUseDefaultCss, classes } = props;
   const { token } = theme.useToken();
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
   const { getClassName } = useGetClassName({
     doUseDefaultCss,
@@ -43,41 +43,55 @@ export default function Login(
   // const [isButtonDisabled] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
-    // const onSubmit: FormProps["onFinish"] = (values): void => {
+  // const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
+  //   // const onSubmit: FormProps["onFinish"] = (values): void => {
+  //   setIsButtonDisabled(true);
+
+  //   // if (!submitted) {
+  //   //   submitted = true;
+  //   //   form.submit();
+  //   // }
+
+  //   // const filteredValues = Object.fromEntries(
+  //   //   Object.entries(values).filter(([, v]) => v !== undefined)
+  //   // );
+
+  //   // fetch(url.loginAction, {
+  //   //   method: "POST",
+  //   //   mode: "navigate",
+  //   //   headers: {
+  //   //     "Content-Type": "application/x-www-form-urlencoded",
+  //   //   },
+  //   //   body: new URLSearchParams(
+  //   //     filteredValues as Record<string, string>
+  //   //   ).toString(),
+  //   // })
+  //   //   .then((response) => {
+  //   //     if (response.ok) {
+  //   //       window.location.href = response.url;
+  //   //     } else {
+  //   //       setIsButtonDisabled(false);
+  //   //     }
+  //   //   })
+  //   //   .catch(() => {
+  //   //     setIsButtonDisabled(false);
+  //   //   });
+  //   // };
+  // });
+
+  const onSubmit = useConstCallback<FormEventHandler<HTMLFormElement>>(e => {
+    e.preventDefault();
+
     setIsButtonDisabled(true);
-    console.log(values);
-    if (!submitted) {
-      submitted = true;
-      form.submit();
-    }
 
-    // const filteredValues = Object.fromEntries(
-    //   Object.entries(values).filter(([, v]) => v !== undefined)
-    // );
+    const formElement = e.target as HTMLFormElement;
 
-    // fetch(url.loginAction, {
-    //   method: "POST",
-    //   mode: "navigate",
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    //   body: new URLSearchParams(
-    //     filteredValues as Record<string, string>
-    //   ).toString(),
-    // })
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       window.location.href = response.url;
-    //     } else {
-    //       setIsButtonDisabled(false);
-    //     }
-    //   })
-    //   .catch(() => {
-    //     setIsButtonDisabled(false);
-    //   });
-    // };
-  });
+    //NOTE: Even if we login with email Keycloak expect username and password in
+    //the POST request.
+    formElement.querySelector("input[name='email']")?.setAttribute("name", "username");
+
+    formElement.submit();
+});
 
   return (
     <div
@@ -99,7 +113,14 @@ export default function Login(
         )}
       >
         {realm.password && (
-          <Form
+          <form
+            id="kc-form-login"
+            autoComplete="off"
+            onSubmit={onSubmit}
+            action={url.loginAction}
+            method="post"
+          >
+            {/* <Form
             name="kc-form-login"
             form={form}
             autoComplete="off"
@@ -107,7 +128,7 @@ export default function Login(
             onFinish={onSubmit}
             action={url.loginAction}
             method="post"
-          >
+          > */}
             <div className={getClassName("kcFormGroupClass")}>
               {!usernameHidden &&
                 (() => {
@@ -139,6 +160,7 @@ export default function Login(
                       label={msg(label)}
                       className={getClassName("kcLabelClass")}
                       htmlFor={autoCompleteHelper}
+                      layout="vertical"
                       initialValue={login.username ?? ""}
                       rules={[
                         {
@@ -177,6 +199,7 @@ export default function Login(
                 label={msg("password")}
                 className={getClassName("kcLabelClass")}
                 htmlFor="password"
+                layout="vertical"
                 rules={[
                   {
                     required: true,
@@ -275,7 +298,8 @@ export default function Login(
                 </Button>
               </Form.Item>
             </div>
-          </Form>
+            {/* </Form> */}
+          </form>
         )}
       </div>
       {realm.password && social.providers !== undefined && (
