@@ -22,6 +22,8 @@ import type { PageProps } from "../typings";
 import type { KcContext } from "../kcContext";
 import type { I18n } from "../i18n";
 
+let submitted = false;
+
 export default function Login(
   props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>
 ) {
@@ -44,31 +46,36 @@ export default function Login(
   const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
     // const onSubmit: FormProps["onFinish"] = (values): void => {
     setIsButtonDisabled(true);
+    console.log(values);
+    if (!submitted) {
+      submitted = true;
+      form.submit();
+    }
 
-    const filteredValues = Object.fromEntries(
-      Object.entries(values).filter(([, v]) => v !== undefined)
-    );
+    // const filteredValues = Object.fromEntries(
+    //   Object.entries(values).filter(([, v]) => v !== undefined)
+    // );
 
-    fetch(url.loginAction, {
-      method: "POST",
-      mode: "navigate",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(
-        filteredValues as Record<string, string>
-      ).toString(),
-    })
-      .then((response) => {
-        if (response.ok) {
-          window.location.href = response.url;
-        } else {
-          setIsButtonDisabled(false);
-        }
-      })
-      .catch(() => {
-        setIsButtonDisabled(false);
-      });
+    // fetch(url.loginAction, {
+    //   method: "POST",
+    //   mode: "navigate",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   body: new URLSearchParams(
+    //     filteredValues as Record<string, string>
+    //   ).toString(),
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       window.location.href = response.url;
+    //     } else {
+    //       setIsButtonDisabled(false);
+    //     }
+    //   })
+    //   .catch(() => {
+    //     setIsButtonDisabled(false);
+    //   });
     // };
   });
 
