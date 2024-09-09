@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { clsx } from "keycloakify/tools/clsx";
-import { useConstCallback } from "keycloakify/tools/useConstCallback";
+// import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import {
   Form,
@@ -9,7 +9,7 @@ import {
   Checkbox,
   theme,
   Button,
-  FormProps,
+  // FormProps,
 } from "antd";
 import {
   UserOutlined,
@@ -38,36 +38,37 @@ export default function Login(
 
   const { msg, msgStr } = i18n;
 
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isButtonDisabled] = useState(false);
+  // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
-    setIsButtonDisabled(true);
+  // const onSubmit = useConstCallback<FormProps["onFinish"]>((values) => {
+  //   setIsButtonDisabled(true);
 
-    const filteredValues = Object.fromEntries(
-      Object.entries(values).filter(([, v]) => v !== undefined)
-    );
+  //   const filteredValues = Object.fromEntries(
+  //     Object.entries(values).filter(([, v]) => v !== undefined)
+  //   );
 
-    fetch(url.loginAction, {
-      method: "POST",
-      mode: 'no-cors',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(
-        filteredValues as Record<string, string>
-      ).toString(),
-    })
-      .then((response) => {
-        if (response.ok) {
-          window.location.href = response.url;
-        } else {
-          setIsButtonDisabled(false);
-        }
-      })
-      .catch(() => {
-        setIsButtonDisabled(false);
-      });
-  });
+  //   fetch(url.loginAction, {
+  //     method: "POST",
+  //     mode: 'no-cors',
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //     },
+  //     body: new URLSearchParams(
+  //       filteredValues as Record<string, string>
+  //     ).toString(),
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         window.location.href = response.url;
+  //       } else {
+  //         setIsButtonDisabled(false);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setIsButtonDisabled(false);
+  //     });
+  // });
 
   return (
     <div
@@ -94,7 +95,7 @@ export default function Login(
             form={form}
             autoComplete="off"
             layout="vertical"
-            onFinish={onSubmit}
+            // onFinish={onSubmit}
             action={url.loginAction}
             method="post"
           >

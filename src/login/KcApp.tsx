@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import Fallback, { type PageProps } from "keycloakify/login";
-import { Typography } from "antd";
+import { theme, Typography } from "antd";
 
 import "./KcApp.css";
 import type { KcContext } from "./kcContext";
@@ -31,6 +31,7 @@ export default function KcApp({ kcContext }: { kcContext: KcContext }) {
   let social, realm, url, registrationDisabled;
   const doUseDefaultCss = false;
   const i18n = useI18n({ kcContext });
+  const { token } = theme.useToken();
 
   if (i18n === null) {
     return null;
@@ -85,7 +86,7 @@ export default function KcApp({ kcContext }: { kcContext: KcContext }) {
               <Typography.Link
                 tabIndex={6}
                 href={url.registrationUrl}
-                style={{ color: "#16C2C2" }}
+                style={{ color: token.colorPrimary }}
                 className="link-focus-visible"
               >
                 {msg("doRegister")}
